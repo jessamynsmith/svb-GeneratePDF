@@ -16,6 +16,13 @@ var fonts = require('./fonts');
 
 function tearSheetGenerator(event, context, callback) {
 
+    // Configurable bucket name for testing;
+    var bucketName = event.awsBucket;
+    if (!bucketName) {
+        // If no bucketName is passed, use the default
+        bucketName = 'sunvalleybronze.com';
+    }
+
     var options = {
         url: event.documentLocation,
         method: 'GET',
@@ -353,7 +360,7 @@ function tearSheetGenerator(event, context, callback) {
                     var s3Path = common.toS3Path(p);
                     var putOptions = {
                         ACL: 'public-read',
-                        Bucket: 'sunvalleybronze.com',
+                        Bucket: bucketName,
                         Key: s3Path,
                         Body: result,
                         ContentDisposition: 'inline; filename=' + path.basename(p),
@@ -363,12 +370,12 @@ function tearSheetGenerator(event, context, callback) {
                     console.log('uploading to s3: ' + s3Path);
                     const s3 = new common.aws.S3();
                     s3.putObject(putOptions, function (err, data) {
-                        callback(err, s3Path)
+                        callback(err, s3Path);
                     });
                 });
                 doc.end();
 
-            })
+            });
 
 }
 module.exports = tearSheetGenerator;
