@@ -219,14 +219,14 @@ function tearSheetGenerator(event, context, callback) {
                         },
                         itemStyle: {
                             width: '10',
-                            fontSize: 6,
+                            fontSize: 9,
                             color: '#585d64',
                             font: 'Calluna',
 
                             margin: [0, 0, 0, 2]
                         },
                         footerStyle: {
-                            fontSize: 5,
+                            fontSize: 9,
                             color: '#585d64',
                             font: 'Calluna',
                             alignment: 'center'
