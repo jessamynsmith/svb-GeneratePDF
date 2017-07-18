@@ -30,6 +30,6 @@ The tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.com/prod
 1. Ensure region is Oregon (Lambda functions are only available in Oregon, and the region must be set *before* you go to Lambda).
 1. Go to Lambda section.
 1. Select GeneratePDF function.
-1. Under the Code tab, click Function Package and select the zip you made.
+1. Under the Code tab, click Function Package and select the zip you made (it will be in the dist directory).
 1. Click the Save button.
 1. Verify the new code is working by going to sunvalleybronze.com and clicking a Tearsheet button.
