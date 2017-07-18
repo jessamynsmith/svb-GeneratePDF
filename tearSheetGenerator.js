@@ -68,13 +68,14 @@ function tearSheetGenerator(event, context, callback) {
 
                     itemTitle = $ItemTitle('p').text();
 
-                    if (custom.itemGallery && custom.itemGallery.length) {
-                        assetUrl = custom.itemGallery[0].assetUrl;
+                    if (item.customContent && item.customContent.customMainImage) {
+                        assetUrl = item.customContent.customMainImage.assetUrl;
+                    } else {
+                        assetUrl = item.assetUrl;
                     }
 
                     if (custom.secondarySwatch) {
                         swatchUrl = custom.secondarySwatch.assetUrl;
-                        assetUrl = item.assetUrl;
                     }
 
                     if (custom.specImage && custom.specImage.assetUrl) {
