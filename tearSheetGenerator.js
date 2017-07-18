@@ -17,10 +17,10 @@ var fonts = require('./fonts');
 function tearSheetGenerator(event, context, callback) {
 
     // Configurable bucket name for testing;
-    var bucketName = event.awsBucket;
-    if (!bucketName) {
+    var bucketName = 'sunvalleybronze.com';
+    if (event.hasOwnProperty('awsBucket')) {
         // If no bucketName is passed, use the default
-        bucketName = 'sunvalleybronze.com';
+        bucketName = event.awsBucket;
     }
 
     var options = {
