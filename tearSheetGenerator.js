@@ -16,6 +16,13 @@ var fonts = require('./fonts');
 
 function tearSheetGenerator(event, context, callback) {
 
+    // Configurable bucket name for testing;
+    var bucketName = 'sunvalleybronze.com';
+    if (event.hasOwnProperty('awsBucket')) {
+        // If no bucketName is passed, use the default
+        bucketName = event.awsBucket;
+    }
+
     var options = {
         url: event.documentLocation,
         method: 'GET',
@@ -61,13 +68,14 @@ function tearSheetGenerator(event, context, callback) {
 
                     itemTitle = $ItemTitle('p').text();
 
-                    if (custom.itemGallery && custom.itemGallery.length) {
-                        assetUrl = custom.itemGallery[0].assetUrl;
+                    if (item.customContent && item.customContent.customMainImage) {
+                        assetUrl = item.customContent.customMainImage.assetUrl;
+                    } else {
+                        assetUrl = item.assetUrl;
                     }
 
                     if (custom.secondarySwatch) {
                         swatchUrl = custom.secondarySwatch.assetUrl;
-                        assetUrl = item.assetUrl;
                     }
 
                     if (custom.specImage && custom.specImage.assetUrl) {
@@ -212,14 +220,14 @@ function tearSheetGenerator(event, context, callback) {
                         },
                         itemStyle: {
                             width: '10',
-                            fontSize: 6,
+                            fontSize: 9,
                             color: '#585d64',
                             font: 'Calluna',
 
                             margin: [0, 0, 0, 2]
                         },
                         footerStyle: {
-                            fontSize: 5,
+                            fontSize: 9,
                             color: '#585d64',
                             font: 'Calluna',
                             alignment: 'center'
@@ -353,7 +361,7 @@ function tearSheetGenerator(event, context, callback) {
                     var s3Path = common.toS3Path(p);
                     var putOptions = {
                         ACL: 'public-read',
-                        Bucket: 'sunvalleybronze.com',
+                        Bucket: bucketName,
                         Key: s3Path,
                         Body: result,
                         ContentDisposition: 'inline; filename=' + path.basename(p),
@@ -363,12 +371,12 @@ function tearSheetGenerator(event, context, callback) {
                     console.log('uploading to s3: ' + s3Path);
                     const s3 = new common.aws.S3();
                     s3.putObject(putOptions, function (err, data) {
-                        callback(err, s3Path)
+                        callback(err, s3Path);
                     });
                 });
                 doc.end();
 
-            })
+            });
 
 }
 module.exports = tearSheetGenerator;
