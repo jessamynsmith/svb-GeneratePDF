@@ -8,4 +8,5 @@ FILENAME="GeneratePDF-$CREATION_DATE.zip"
 
 mkdir -p dist
 
-zip -r -X "./dist/$FILENAME" *
+# Zip up source files. Exclude results, dist, and keys directories
+zip -r -x "results/*" -x "dist/*" -x "keys/*" -X "./dist/$FILENAME" *
