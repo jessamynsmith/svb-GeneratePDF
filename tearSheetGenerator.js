@@ -46,7 +46,7 @@ function tearSheetGenerator(event, context, callback) {
                         fileName = item.title,
                         item_id = custom.itemID || '',
                         itemId = isSwatchType ? 'FINISH ' + item_id : item_id,
-                        title = custom.itemTitle.source || '',
+                        title = custom.itemTitle.html || '',
                         body = item.body || '',
                         series = _.without(item.tags, '* Featured', 'Specialty'),
                         $Body = cheerio.load(body.replace(/<br \/>/g, '</p><p>'));
