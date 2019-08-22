@@ -15,6 +15,48 @@ var q = require('q');
 var fonts = require('./fonts');
 
 function tearSheetGenerator(event, context, callback) {
+  
+    // Global variables and functions used for flexibly retrieving images
+    // from squarespace, including following any redirects.
+    var defer;
+    var globalResults;
+    var resultsKey = '';
+                  
+    var createOpts = function(dataUrl) {
+      var opts = url.parse(dataUrl);
+
+      opts.headers = {'User-Agent': 'javascript'};
+      opts.protocol = "http:";
+      
+      return opts;
+    };
+
+    var followRedirectHttpHandler = function (response) {
+
+      var type = response.headers["content-type"],
+          prefix = "data:" + type + ";base64,",
+          body = "";
+
+      response.setEncoding('binary');
+
+      response.on('data', function (chunk) {
+          if (response.statusCode === 200) {
+            body += chunk;
+          }
+      });
+      response.on('end', function () {
+        if (response.statusCode === 200) {
+          var base64 = new Buffer(body, 'binary').toString('base64');
+          globalResults[resultsKey] = prefix + base64;
+          defer.resolve(globalResults);
+        } else if (response.statusCode === 301) {
+          // If we get a redirect, follow it and try to get the image from that location
+          var opts = createOpts(response.headers.location);
+          http.get(opts, followRedirectHttpHandler);
+        }
+      });
+    };
+    // End Global variables and functions
 
     // Configurable bucket name for testing;
     var bucketName = 'sunvalleybronze.com';
@@ -58,10 +100,6 @@ function tearSheetGenerator(event, context, callback) {
                         useLargeSpecImage = custom['specImage-lrg'] || false;
 
 
-
-
-
-
                     $Body('p').each(function (i, elem) {
                         textItems.push($Body(this).text());
                     });
@@ -85,7 +123,7 @@ function tearSheetGenerator(event, context, callback) {
                     if (assetUrl === "") {
                         callback("AssetUrl can not be empty");
                     }
-                    return {
+                    var result_data = {
                         assetUrl: assetUrl,
                         isSwatchType: isSwatchType,
                         secondaryUrl: specUrl || swatchUrl,
@@ -96,69 +134,35 @@ function tearSheetGenerator(event, context, callback) {
                         series: series,
                         fileName: fileName
                     };
+                    return result_data;
                 }
             }
         })
             .then(function (results) {
-                var defer = q.defer();
+                defer = q.defer();
 
                 if (results.secondaryUrl) { // grabbing
-                    var opts = url.parse(results.secondaryUrl);
-
-                    opts.headers = {'User-Agent': 'javascript'};
-                    opts.protocol = "http:";
-                    http.get(opts, function (response) {
-
-                        var type = response.headers["content-type"],
-                            prefix = "data:" + type + ";base64,",
-                            body = "";
-
-                        response.setEncoding('binary');
-
-                        response.on('data', function (chunk) {
-                            if (response.statusCode == 200) {
-                                body += chunk;
-                            }
-                        });
-                        response.on('end', function () {
-
-                            var base64 = new Buffer(body, 'binary').toString('base64');
-                            results.secondaryData = prefix + base64;
-                            defer.resolve(results);
-                        });
-                    })
+                    globalResults = results;
+                    resultsKey = 'secondaryData';
+                    
+                    var opts = createOpts(results.secondaryUrl);
+                    http.get(opts, followRedirectHttpHandler);
                 } else {
                     defer.resolve(results);
                 }
                 return defer.promise;
             })
             .then(function (results) {
-                var defer = q.defer();
+                defer = q.defer();
 
                 if (results.assetUrl) {
-                    var opts = url.parse(results.assetUrl);
-
-                    opts.headers = {'User-Agent': 'javascript'};
-                    opts.protocol = "http:";
-                    http.get(opts, function (response) {
-
-                        var type = response.headers["content-type"],
-                            prefix = "data:" + type + ";base64,",
-                            body = "";
-
-                        response.setEncoding('binary');
-
-                        response.on('data', function (chunk) {
-                            if (response.statusCode == 200) body += chunk;
-                        });
-                        response.on('end', function () {
-                            var base64 = new Buffer(body, 'binary').toString('base64');
-                            results.assetData = prefix + base64;
-                            defer.resolve(results);
-                        });
-                    });
+                    globalResults = results;
+                    resultsKey = 'assetData';
+                    
+                    var opts = createOpts(results.assetUrl);
+                    http.get(opts, followRedirectHttpHandler);
                 } else {
-                    callback('Could not convert AssetUrl')
+                    callback('Could not convert AssetUrl');
                 }
 
                 return defer.promise;
