@@ -21,6 +21,17 @@ function tearSheetGenerator(event, context, callback) {
     var defer;
     var globalResults;
     var resultsKey = '';
+
+    var getFilenameFromUrl = function(url) {
+        var parts = url.split('/');
+        var filename = parts[parts.length - 1];
+        return filename;
+    };
+
+    var createCdnUrl = function(systemDataId, filename) {
+        var url = `https://images.squarespace-cdn.com/content/56143f12e4b03f677dbf60c7/${systemDataId}/${filename}`;
+        return url;
+    };
                   
     var createOpts = function(dataUrl) {
       var opts = url.parse(dataUrl);
@@ -132,7 +143,8 @@ function tearSheetGenerator(event, context, callback) {
                         itemId: itemId,
                         title: itemTitle,
                         series: series,
-                        fileName: fileName
+                        fileName: fileName,
+                        systemDataId: results.item.systemDataId,
                     };
                     return result_data;
                 }
@@ -144,8 +156,10 @@ function tearSheetGenerator(event, context, callback) {
                 if (results.secondaryUrl) { // grabbing
                     globalResults = results;
                     resultsKey = 'secondaryData';
-                    
-                    var opts = createOpts(results.secondaryUrl);
+
+                    var secondaryFilename = getFilenameFromUrl(results.secondaryUrl);
+                    var secondaryUrl = createCdnUrl(results.systemDataId, secondaryFilename);
+                    var opts = createOpts(secondaryUrl);
                     http.get(opts, followRedirectHttpHandler);
                 } else {
                     defer.resolve(results);
