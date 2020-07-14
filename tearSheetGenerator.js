@@ -107,7 +107,9 @@ function tearSheetGenerator(event, context, callback) {
                         textItems = [],
                         assetUrl = '',
                         specUrl = '',
+                        specUrlSystemDataId = '',
                         swatchUrl = '',
+                        swatchUrlSystemDataId = '',
                         useLargeSpecImage = custom['specImage-lrg'] || false;
 
 
@@ -125,10 +127,12 @@ function tearSheetGenerator(event, context, callback) {
 
                     if (custom.secondarySwatch) {
                         swatchUrl = custom.secondarySwatch.assetUrl;
+                        swatchUrlSystemDataId = custom.secondarySwatch.systemDataId;
                     }
 
                     if (custom.specImage && custom.specImage.assetUrl) {
                         specUrl = custom.specImage.assetUrl;
+                        specUrlSystemDataId = custom.specImage.systemDataId;
                     }
 
                     if (assetUrl === "") {
@@ -138,6 +142,7 @@ function tearSheetGenerator(event, context, callback) {
                         assetUrl: assetUrl,
                         isSwatchType: isSwatchType,
                         secondaryUrl: specUrl || swatchUrl,
+                        secondarySystemDataId: specUrlSystemDataId || swatchUrlSystemDataId,
                         useLargeSpecImage: useLargeSpecImage,
                         textItems: textItems,
                         itemId: itemId,
@@ -158,7 +163,7 @@ function tearSheetGenerator(event, context, callback) {
                     resultsKey = 'secondaryData';
 
                     var secondaryFilename = getFilenameFromUrl(results.secondaryUrl);
-                    var secondaryUrl = createCdnUrl(results.systemDataId, secondaryFilename);
+                    var secondaryUrl = createCdnUrl(results.secondarySystemDataId, secondaryFilename);
                     var opts = createOpts(secondaryUrl);
                     http.get(opts, followRedirectHttpHandler);
                 } else {
