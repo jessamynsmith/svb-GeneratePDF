@@ -8,13 +8,18 @@ makes an ajax call to the tearsheetUrl.
 
 The Amazon tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.com/prod/GeneratePDF
 
+
 ### Local testing
 
 1. Copy example-secrets.json into secrets.json and edit it to contain your AWS credentials.
-1. npm install
+1. In terminal:
+
+    npm install
+    npm install -g nodemon
+    
 1. Run the server:
 
-    node server.js
+    nodemon server.js
     
 1. Generating a PDF for a given item URL:
 
@@ -25,6 +30,10 @@ The Amazon tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.c
     curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
     
     curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/ts-kyo2175-kyoto-handle-x-lever-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
+    
+    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/knobs/k-201-mushroom-door-knob"}' http://127.0.0.1:5000/GeneratePDF
+    
+    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/kitchen-and-bath/faucets-and-fixtures/ts-shr-900-/-ts-shr-901hh-1-rnd-exposed-wall-mount-thermostatic-shower-set-with-hand-held-shower-and-round-escutcheons"}' http://127.0.0.1:5000/GeneratePDF
     
     Swatch:
     curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/finishes/s"}' http://127.0.0.1:5000/GeneratePDF
