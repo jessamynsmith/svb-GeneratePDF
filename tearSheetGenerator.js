@@ -94,10 +94,12 @@ function tearSheetGenerator(event, context, callback) {
                     
                     var filterTags = function(tags) {
                         var filteredTags = [];
-                        for (var i = 0; i < tags.length; i++) {
-                            var value = tags[i];
-                            if (value !== 'Specialty' && !value.startsWith('* ')) {
-                                filteredTags.push(value);
+                        if (tags) {
+                            for (var i = 0; i < tags.length; i++) {
+                                var value = tags[i];
+                                if (value !== 'Specialty' && !value.startsWith('* ')) {
+                                    filteredTags.push(value);
+                                }
                             }
                         }
                         return filteredTags;

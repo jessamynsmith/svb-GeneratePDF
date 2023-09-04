@@ -35,6 +35,7 @@ The Amazon tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.c
     curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/levers/l-106-square-lever"}' http://127.0.0.1:5000/GeneratePDF
     curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/interior-sets/cs-n2065-8iml-pr-novus-saddle-privacy-set"}' http://127.0.0.1:5000/GeneratePDF
     curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/lever-knob-entry-sets/cs-m100-ml-minimalist-mortise-lock-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
+    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/cabinet-hardware/pulls/ck-722-twig-cabinet-pull"}' http://127.0.0.1:5000/GeneratePDF
     
     curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/ts-kyo2175-kyoto-handle-x-lever-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
     
