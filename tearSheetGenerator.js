@@ -5,11 +5,9 @@ var rp = require('request-promise');
 var common = require("./common");
 var PdfPrinter = require('pdfmake/src/printer');
 var fs = require('fs');
-var pdfMake = require('pdfmake');
-var http = require('http');
+var https = require('https');
 var url = require('url');
 var mime = require('mime-types');
-var secrets = require('./secrets');
 var cheerio = require('cheerio');
 var q = require('q');
 var fonts = require('./fonts');
@@ -37,7 +35,7 @@ function tearSheetGenerator(event, context, callback) {
       var opts = url.parse(dataUrl);
 
       opts.headers = {'User-Agent': 'javascript'};
-      opts.protocol = "http:";
+      opts.protocol = "https:";
       
       return opts;
     };
@@ -57,13 +55,13 @@ function tearSheetGenerator(event, context, callback) {
       });
       response.on('end', function () {
         if (response.statusCode === 200) {
-          var base64 = new Buffer(body, 'binary').toString('base64');
+          var base64 = new Buffer.from(body, 'binary').toString('base64');
           globalResults[resultsKey] = prefix + base64;
           defer.resolve(globalResults);
         } else if (response.statusCode === 301) {
           // If we get a redirect, follow it and try to get the image from that location
           var opts = createOpts(response.headers.location);
-          http.get(opts, followRedirectHttpHandler);
+          https.get(opts, followRedirectHttpHandler);
         }
       });
     };
@@ -93,7 +91,19 @@ function tearSheetGenerator(event, context, callback) {
                 if (!(item && item.customContent)) {
                     callback(" Could not get Json for Item");
                 } else {
+                    
+                    var filterTags = function(tags) {
+                        var filteredTags = [];
+                        for (var i = 0; i < tags.length; i++) {
+                            var value = tags[i];
+                            if (value !== 'Specialty' && !value.startsWith('* ')) {
+                                filteredTags.push(value);
+                            }
+                        }
+                        return filteredTags;
+                    };
 
+                    var filteredTags = filterTags(item.tags);
                     var custom = item.customContent,
                         isSwatchType = custom.customType == 'swatch',
                         fileName = item.title,
@@ -101,7 +111,7 @@ function tearSheetGenerator(event, context, callback) {
                         itemId = isSwatchType ? 'FINISH ' + item_id : item_id,
                         title = custom.itemTitle.html || '',
                         body = item.body || '',
-                        series = _.without(item.tags, '* Featured', 'Specialty'),
+                        series = filteredTags,
                         $Body = cheerio.load(body.replace(/<br \/>/g, '</p><p>'));
                         $ItemTitle = cheerio.load(title),
                         textItems = [],
@@ -165,7 +175,7 @@ function tearSheetGenerator(event, context, callback) {
                     var secondaryFilename = getFilenameFromUrl(results.secondaryUrl);
                     var secondaryUrl = createCdnUrl(results.secondarySystemDataId, secondaryFilename);
                     var opts = createOpts(secondaryUrl);
-                    http.get(opts, followRedirectHttpHandler);
+                    https.get(opts, followRedirectHttpHandler);
                 } else {
                     defer.resolve(results);
                 }
@@ -179,7 +189,7 @@ function tearSheetGenerator(event, context, callback) {
                     resultsKey = 'assetData';
                     
                     var opts = createOpts(results.assetUrl);
-                    http.get(opts, followRedirectHttpHandler);
+                    https.get(opts, followRedirectHttpHandler);
                 } else {
                     callback('Could not convert AssetUrl');
                 }
@@ -352,6 +362,20 @@ function tearSheetGenerator(event, context, callback) {
                                             color: '#585d64'
                                         }]
                                     ]
+                                },
+                                layout: {
+                                    hLineWidth: function (i, node) {
+                                        return 0.6;
+                                    },
+                                    vLineWidth: function (i, node) {
+                                        return 0.6;
+                                    },
+                                    hLineColor: function (i, node) {
+                                        return '#cccccc';
+                                    },
+                                    vLineColor: function (i, node) {
+                                        return '#cccccc';
+                                    },
                                 }
                             });
                         });
@@ -382,6 +406,13 @@ function tearSheetGenerator(event, context, callback) {
 
                     var p = 'public/tearsheets/tearsheet_' + results.fileName + '.pdf';
                     var s3Path = common.toS3Path(p);
+                    console.log('uploading to s3: ' + s3Path);
+                    
+                    // Uncomment for debugging
+                    // fs.mkdirSync(path.dirname(s3Path), { recursive: true });
+                    // fs.writeFileSync(s3Path, result);
+                    // callback(null, s3Path);
+                    
                     var putOptions = {
                         ACL: 'public-read',
                         Bucket: bucketName,
@@ -391,7 +422,6 @@ function tearSheetGenerator(event, context, callback) {
                         ContentType: mime.lookup(p) || 'application/octet-stream'
                     };
 
-                    console.log('uploading to s3: ' + s3Path);
                     const s3 = new common.aws.S3();
                     s3.putObject(putOptions, function (err, data) {
                         callback(err, s3Path);
@@ -399,7 +429,11 @@ function tearSheetGenerator(event, context, callback) {
                 });
                 doc.end();
 
-            });
+            })
+        .catch(function(err) {
+            console.log(err);
+            callback(err);
+        });
 
 }
 module.exports = tearSheetGenerator;
