@@ -2,6 +2,8 @@
 
 This repository is uploaded to the AWS Lambda function GeneratePDF.
 
+It runs in Node 18.
+
 The functionality is accessed from the squarespace site. Both catalog-collection.item
 and swatch-collection.item have a .generateTearSheet class with a click listener that
 makes an ajax call to the tearsheetUrl.
