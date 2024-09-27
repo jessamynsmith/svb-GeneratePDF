@@ -25,8 +25,7 @@ The Amazon tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.c
     
 1. Generating a PDF for a given item URL:
 
-    BROKEN TEARSHEET: https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set
-    WORKING TEARSHEET: https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/ts-kyo2175-kyoto-handle-x-lever-door-entry-set
+    https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set
 
     Spec:
     curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set"}' http://127.0.0.1:5001/GeneratePDF
