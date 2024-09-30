@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1691.0",
-    "cheerio": "^1.0.0-rc.9",
+    "cheerio": "1.0.0-rc.9",
     "mime-types": "^2.1.35",
     "pdfmake": "^0.1.72",
     "q": "^1.5.1",
