@@ -23,30 +23,19 @@ The Amazon tearsheetUrl is: https://7kscbhlqn1.execute-api.us-west-2.amazonaws.c
 
     nodemon server.js
     
-1. Generating a PDF for a given item URL:
+   1. Generating a PDF for a given item URL:
 
-    https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set
+       https://www.sunvalleybronze.com/catalog/door-hardware/knobs/k-201-mushroom-door-knob
 
     Spec:
-    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/cs-wh1618-vertical-inlay-handle-x-lever-mortise-lock-door-entry-set"}' http://127.0.0.1:5001/GeneratePDF
+    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/knobs/k-201-mushroom-door-knob"}' http://127.0.0.1:5001/GeneratePDF
 
     Tags testing:
-    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/levers/l-106-square-lever"}' http://127.0.0.1:5000/GeneratePDF
-    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/interior-sets/cs-n2065-8iml-pr-novus-saddle-privacy-set"}' http://127.0.0.1:5000/GeneratePDF
-    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/lever-knob-entry-sets/cs-m100-ml-minimalist-mortise-lock-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
-    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/cabinet-hardware/pulls/ck-722-twig-cabinet-pull"}' http://127.0.0.1:5000/GeneratePDF
-    
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/handle-entry-sets/ts-kyo2175-kyoto-handle-x-lever-door-entry-set"}' http://127.0.0.1:5000/GeneratePDF
-    
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/knobs/k-201-mushroom-door-knob"}' http://127.0.0.1:5000/GeneratePDF
-    
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/kitchen-and-bath/faucets-and-fixtures/ts-shr-900-/-ts-shr-901hh-1-rnd-exposed-wall-mount-thermostatic-shower-set-with-hand-held-shower-and-round-escutcheons"}' http://127.0.0.1:5000/GeneratePDF
+    curl -vk -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/door-hardware/levers/l-106-square-lever"}' http://127.0.0.1:5001/GeneratePDF
     
     Swatch:
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/finishes/s"}' http://127.0.0.1:5000/GeneratePDF
-    
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "http://www.sunvalleybronze.com/catalog/door-hardware/grip-handles/dh-6-d-handle"}' http://127.0.0.1:5000/GeneratePDF
-    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/catalog/hospitality/card-readers/ts-f424ml-pf"}' http://127.0.0.1:5000/GeneratePDF
+    curl -X POST -H "Content-Type: application/json" --data '{"itemUrl": "https://www.sunvalleybronze.com/finishes/s"}' http://127.0.0.1:5001/GeneratePDF
+
 
 ### Updating on Amazon 
 
