@@ -9,17 +9,17 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.906.0",
+    "aws-sdk": "^2.1691.0",
     "cheerio": "^1.0.0-rc.9",
-    "mime-types": "^2.1.11",
-    "pdfmake": "^0.1.18",
+    "mime-types": "^2.1.35",
+    "pdfmake": "^0.1.72",
     "q": "^1.5.1",
     "request": "^2.74.0",
     "request-promise": "4.1.1",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.7"
   },
   "devDependencies": {
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3"
+    "body-parser": "^1.20.3",
+    "express": "^4.21.0"
   }
 }
